@@ -1,7 +1,14 @@
 import { createApp } from 'vue';
-import { router } from './router';
-import { store, key } from './store';
 import App from './App.vue';
+
+/** Styles - WindiCSS */
+import 'virtual:windi.css'
+
+/** Router - Vue Router */
+import { router } from './router';
+
+/** Store - Vuex */
+import { store, key } from './store';
 
 const app = createApp(App);
 

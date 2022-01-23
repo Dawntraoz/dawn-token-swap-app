@@ -1,5 +1,5 @@
-import counter from './counter';
+import theme from './theme';
 
 export default {
-  counter,
+  theme,
 };

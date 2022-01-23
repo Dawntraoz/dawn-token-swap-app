@@ -1,8 +1,17 @@
 <template>
-  <img alt="Vue logo" src="../assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vuex + Vue Router + TypeScript + Vite" />
+  <div class="container mx-auto px-4">
+    <swap-form />
+  </div>
 </template>
 
-<script setup lang="ts">
-import HelloWorld from '../components/HelloWorld.vue';
+<script lang="ts">
+import { defineComponent } from 'vue'
+import SwapForm from '../components/SwapForm.vue';
+
+export default defineComponent({
+  name: 'Home',
+  components: {
+    SwapForm,
+  },
+});
 </script>

@@ -3,10 +3,10 @@ import { createStore } from 'vuex';
 
 import type { Store } from 'vuex';
 import modules from './modules';
-import type { Counter } from './modules/counter';
+import type { Theme } from './modules/theme';
 
 export type RootState = {
-  counter: Counter;
+  theme: Theme;
 };
 
 export const key: InjectionKey<Store<RootState>> = Symbol();

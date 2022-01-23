@@ -1,28 +1,26 @@
-<script setup lang="ts"></script>
-
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>
-    |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <AppHeader />
   <router-view></router-view>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+import AppHeader from './components/layout/AppHeader.vue'
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    AppHeader,
+  },
+  mounted() {
+    this.$store.dispatch('setTheme', this.$store.getters.theme)
+  },
+});
+</script>
+
 <style>
-#app {
-  @apply font-sans leading-snug text-center text-gray-700 mt-12;
-}
-
-nav {
-  @apply p-8;
-}
-
-nav a {
-  @apply font-bold text-gray-700;
-}
-
-nav a.router-link-exact-active {
-  @apply text-green-500;
+body {
+  @apply bg-violet-100 dark:bg-violet-700 text-violet-900 dark:text-violet-100;
 }
 </style>
