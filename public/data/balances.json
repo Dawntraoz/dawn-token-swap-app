@@ -1,0 +1,28 @@
+{
+  "balances": [
+    {
+      "token": "ETH",
+      "balance": "121"
+    },
+    {
+      "token": "BTC",
+      "balance": "1.4"
+    },
+    {
+      "token": "ATOM",
+      "balance": "150"
+    },
+    {
+      "token": "XRP",
+      "balance": "1200"
+    },
+    {
+      "token": "UNI",
+      "balance": "213"
+    },
+    {
+      "token": "DAI",
+      "balance": "900"
+    }
+  ]
+}

@@ -16,15 +16,15 @@ const theme: Module<Theme, unknown> = {
     },
   },
   mutations: {
-    setTheme(state, payload: 'dark' | 'light') {
-      state.theme = payload;
+    SET_THEME(state, theme: 'dark' | 'light') {
+      state.theme = theme;
     },
   },
   actions: {
-    setTheme({ commit, state }, payload: 'dark' | 'light') {
+    setTheme({ commit, state }, theme: 'dark' | 'light') {
       document.documentElement.classList.remove(state.theme)
-      document.documentElement.classList.add(payload)
-      commit('setTheme', payload)
+      document.documentElement.classList.add(theme)
+      commit('SET_THEME', theme)
     },
   },
 };
