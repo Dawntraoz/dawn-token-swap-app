@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import SwapForm from '../components/SwapForm.vue';
+import SwapForm from '../components/organisms/SwapForm.vue';
 
 export default defineComponent({
   name: 'Home',

@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TokenInput from './atoms/TokenInput.vue';
+import TokenInput from '../atoms/TokenInput.vue';
 
 export default defineComponent({
   name: 'SwapForm',

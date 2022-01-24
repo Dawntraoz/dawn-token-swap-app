@@ -1,5 +1,5 @@
 <template>
-  <input :value="modelValue" type="number" min="0" class="bg-transparent font-medium text-3xl w-full focus:outline-none" @keypress="validatePrice" @input="updatePrice($event)">
+  <input :value="modelValue" type="number" min="0" class="bg-transparent font-medium text-3xl w-full focus:outline-none" @keypress="validatePrice" @input="updatePrice">
 </template>
 
 <script lang="ts">
@@ -20,11 +20,12 @@ export default defineComponent({
     }
   },
   methods: {
-    validatePrice(event: any) {
+    validatePrice(event: KeyboardEvent) {
       if(this.invalidPriceChars.includes(event.key)) event.preventDefault();
     },
-    updatePrice(event: any) {
-      this.$emit('update:modelValue', +event.target.value)
+    updatePrice(event: Event) {
+      const target = (event.target as HTMLInputElement);
+      this.$emit('update:modelValue', +target.value);
     }
   }
 });
