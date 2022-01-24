@@ -1,5 +1,5 @@
 <template>
-  <input :value="modelValue" type="number" min="0" class="bg-transparent font-medium text-3xl w-full focus:outline-none" @keypress="validatePrice" @input="updatePrice">
+  <input :value="modelValue" type="text" minlength="0" maxlength="79" class="price-input" @keypress="validatePrice" @input="updatePrice">
 </template>
 
 <script lang="ts">
@@ -9,30 +9,42 @@ export default defineComponent({
   name: 'TokenInput',
   props: {
     modelValue: {
-      type: Number,
+      type: String,
       required: true
+    },
+    balance: {
+      type: String,
+      default: "0"
     }
   },
   emits: ['update:modelValue'],
   data() {
     return {
-      invalidPriceChars: ['-', '+', 'e']
+      validationRegex: new RegExp('^[0-9]*[.,]?[0-9]*$')
     }
   },
   methods: {
-    validatePrice(event: KeyboardEvent) {
-      if(this.invalidPriceChars.includes(event.key)) event.preventDefault();
+    validatePrice(event: KeyboardEvent): boolean {
+      const target = (event.target as HTMLInputElement);
+      const currentValue = `${target.value}${event.key}`;
+      if(!this.validationRegex.test(currentValue)) {
+        event.preventDefault();
+        return false;
+      }
+
+      return true;
     },
     updatePrice(event: Event) {
       const target = (event.target as HTMLInputElement);
-      this.$emit('update:modelValue', +target.value);
+      const priceValue = target.value.replace(',', '.');
+      this.$emit('update:modelValue', (+priceValue > +this.balance) ? this.balance : priceValue);
     }
   }
 });
 </script>
 
 <style scoped>
-.swap-card {
-  @apply bg-white dark:bg-violet-500 w-2xl max-w-full rounded-2xl p-6 shadow-lg;
+.price-input {
+  @apply bg-transparent font-medium text-3xl w-full focus:outline-none;
 }
 </style>

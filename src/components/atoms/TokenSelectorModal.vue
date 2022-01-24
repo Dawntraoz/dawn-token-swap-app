@@ -1,0 +1,60 @@
+<template>
+  <div class="fixed inset-0 bg-violet-500 bg-opacity-50 pt-16 px-4" @click="clickOutside">
+    <ul ref="tokenSelectorDialog" class="max-h-[80vh] overflow-y-auto w-lg max-w-full bg-white dark:bg-violet-500 rounded-2xl shadow-lg mx-auto py-4">
+      <li
+        v-for="{ id, name, image } in tokens"
+        :key="`crypto-token-${id}`"
+        class="token-item"
+        :class="{ disabled: (tokenFrom?.id === id || tokenTo?.id === id) }"
+        @click="sendSelectedToken({ id, name, image })"
+      >
+        <img :src="image" :alt="`${name} logo`" width="40" height="40" class="bg-white rounded-full w-10 h-10 p-1" loading="lazy" />
+        <p class="flex flex-col font-medium">
+          {{ id }}
+          <span class="font-light text-xs text-violet-500 dark:text-violet-200">{{ name }}</span>
+        </p>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import type { Token } from '../../store/modules/tokens';
+
+export default defineComponent({
+  name: 'TokenSelectorModal',
+  emits: ['closeModal', 'selectedToken'],
+  computed: {
+    tokens() {
+      return this.$store.getters.tokens;
+    },
+    tokenFrom() {
+      return this.$store.getters.tokenFrom;
+    },
+    tokenTo() {
+      return this.$store.getters.tokenTo;
+    },
+  },
+  methods: {
+    clickOutside(event: Event): void {
+      const childElement = this.$refs['tokenSelectorDialog'] as HTMLElement;
+      if (event.target instanceof HTMLElement && !childElement.contains(event.target)) {
+        this.$emit('closeModal');
+      }
+    },
+    sendSelectedToken(token: Token) {
+      this.$emit('selectedToken', token);
+    }
+  }
+});
+</script>
+
+<style scoped>
+.token-item {
+  @apply grid grid-cols-[40px,minmax(auto,1fr)] items-center py-2 px-6 gap-x-4 cursor-pointer hover:bg-violet-100 dark:hover:bg-violet-700 hover:bg-opacity-70;
+}
+.token-item.disabled {
+  @apply pointer-events-none opacity-50 hover:bg-transparent;
+}
+</style>

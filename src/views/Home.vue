@@ -13,5 +13,9 @@ export default defineComponent({
   components: {
     SwapForm,
   },
+  async mounted() {
+    await this.$store.dispatch('getTokens');
+    await this.$store.dispatch('getBalances');
+  }
 });
 </script>

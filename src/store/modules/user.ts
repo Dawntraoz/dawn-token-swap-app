@@ -2,7 +2,7 @@ import type { Module } from 'vuex';
 
 type Balance = {
   token: string;
-  balance: number;
+  balance: string;
 }
 
 export type User = {
@@ -24,6 +24,9 @@ const user: Module<User, unknown> = {
     balances(state) {
       return state.balances
     },
+    getBalanceByToken: (state) => (tokenId: string): string | undefined => {
+      return state.balances.find(balance => balance.token === tokenId)?.balance
+    }
   },
   mutations: {
     SET_ADDRESS(state, address: string) {
@@ -35,7 +38,7 @@ const user: Module<User, unknown> = {
   },
   actions: {
     async getAddress({ commit }) {
-      const response = await fetch(new Request('/data/address.json'));
+      const response = await fetch(new Request('/data/account.json'));
       const { address } = await response.json();
       commit('SET_ADDRESS', address)
     },
