@@ -5,6 +5,8 @@
     placeholder="0.0"
     minlength="0"
     maxlength="79"
+    autocomplete="off"
+    autocorrect="off"
     class="price-input"
     :readonly="readonly"
     @keydown="validatePrice"
