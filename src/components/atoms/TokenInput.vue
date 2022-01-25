@@ -7,7 +7,7 @@
     maxlength="79"
     class="price-input"
     :readonly="readonly"
-    @keypress="validatePrice"
+    @keydown="validatePrice"
     @input="updatePrice"
   >
   <small-tag v-if="!readonly && balance === modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-sm text-red-500">
