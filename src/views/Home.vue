@@ -1,6 +1,7 @@
 <template>
   <div class="container mx-auto py-6 px-4">
-    <swap-form />
+    <p v-if="isLoading" class="text-center">Getting data...</p>
+    <swap-form v-else />
   </div>
 </template>
 
@@ -13,9 +14,16 @@ export default defineComponent({
   components: {
     SwapForm,
   },
+  data() {
+    return {
+      isLoading: true
+    }
+  },
   async mounted() {
     await this.$store.dispatch('getTokens');
     await this.$store.dispatch('getBalances');
+    await this.$store.dispatch('getPools');
+    this.isLoading = false;
   }
 });
 </script>

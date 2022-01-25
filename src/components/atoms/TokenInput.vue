@@ -1,20 +1,41 @@
 <template>
-  <input :value="modelValue" type="text" minlength="0" maxlength="79" class="price-input" @keypress="validatePrice" @input="updatePrice">
+  <input
+    :value="modelValue"
+    type="text"
+    placeholder="0.0"
+    minlength="0"
+    maxlength="79"
+    class="price-input"
+    :readonly="readonly"
+    @keypress="validatePrice"
+    @input="updatePrice"
+  >
+  <small-tag v-if="!readonly && balance === modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-sm text-red-500">
+    {{ +balance ? 'max. balance' : 'insufficient balance' }}
+  </small-tag>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import SmallTag from './SmallTag.vue';
 
 export default defineComponent({
   name: 'TokenInput',
+  components: {
+    SmallTag
+  },
   props: {
     modelValue: {
       type: String,
       required: true
     },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
     balance: {
       type: String,
-      default: "0"
+      default: '0'
     }
   },
   emits: ['update:modelValue'],
@@ -27,7 +48,7 @@ export default defineComponent({
     validatePrice(event: KeyboardEvent): boolean {
       const target = (event.target as HTMLInputElement);
       const currentValue = `${target.value}${event.key}`;
-      if(!this.validationRegex.test(currentValue)) {
+      if(!this.validationRegex.test(currentValue) || this.balance === this.modelValue) {
         event.preventDefault();
         return false;
       }
@@ -46,5 +67,8 @@ export default defineComponent({
 <style scoped>
 .price-input {
   @apply bg-transparent font-medium text-3xl w-full focus:outline-none;
+}
+.price-input:read-only {
+  @apply font-normal text-violet-400 dark:text-violet-200;
 }
 </style>
