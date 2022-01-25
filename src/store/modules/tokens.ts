@@ -15,8 +15,8 @@ export type Pool = {
 
 export type Tokens = {
   tokenFrom: Token | any;
-  priceFrom: string;
   tokenTo: Token | any;
+  priceFrom: string;
   priceTo: string;
   tokens: Token[];
   pools: Pool[];
@@ -26,32 +26,33 @@ const tokens: Module<Tokens, unknown> = {
   state() {
     return {
       tokenFrom: undefined,
-      priceFrom: '0',
       tokenTo: undefined,
-      priceTo: '0',
+      priceFrom: '',
+      priceTo: '',
       tokens: [],
       pools: []
     };
   },
   getters: {
-    tokenFrom(state) {
+    tokenFrom(state): Token {
       return state.tokenFrom
     },
-    priceFrom(state) {
-      return state.priceFrom
-    },
-    tokenTo(state) {
+    tokenTo(state): Token {
       return state.tokenTo
     },
-    priceTo(state) {
+    priceFrom(state): string {
+      return state.priceFrom
+    },
+    priceTo(state): string {
       return state.priceTo
     },
-    tokens(state) {
+    tokens(state): Token[] {
       return state.tokens
     },
-    pools(state) {
-      return state.pools
-    },
+    getPoolByTokens: (state) => (tokenFrom: string, tokenTo: string): Pool | undefined => {
+      const comparePoolTokens = (token: string, pool: Pool): boolean => (pool.tokenA === token || pool.tokenB === token);
+      return state.pools.find(pool => comparePoolTokens(tokenFrom, pool) && comparePoolTokens(tokenTo, pool))
+    }
   },
   mutations: {
     SET_TOKEN_FROM(state, tokenFrom: Token) {
@@ -77,14 +78,24 @@ const tokens: Module<Tokens, unknown> = {
     setTokenFrom({ commit }, tokenFrom: Token) {
       commit('SET_TOKEN_FROM', tokenFrom);
     },
-    setPriceFrom({ commit }, priceFrom: string) {
-      commit('SET_PRICE_FROM', priceFrom);
-    },
     setTokenTo({ commit }, tokenTo: Token) {
       commit('SET_TOKEN_TO', tokenTo);
     },
+    setPriceFrom({ commit }, priceFrom: string) {
+      commit('SET_PRICE_FROM', priceFrom);
+    },
     setPriceTo({ commit }, priceTo: string) {
       commit('SET_PRICE_TO', priceTo);
+    },
+    resetPrices({ commit }) {
+      commit('SET_PRICE_FROM', '');
+      commit('SET_PRICE_TO', '');
+    },
+    invertTokens({ commit }, payload) {
+      commit('SET_TOKEN_FROM', payload.tokenFrom);
+      commit('SET_TOKEN_TO', payload.tokenTo);
+      commit('SET_PRICE_FROM', payload.priceFrom);
+      commit('SET_PRICE_TO', payload.priceTo);
     },
     async getTokens({ commit }) {
       const response = await fetch(new Request('/data/tokens.json'));

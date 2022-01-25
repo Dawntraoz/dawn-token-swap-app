@@ -18,14 +18,14 @@ const user: Module<User, unknown> = {
     };
   },
   getters: {
-    address(state) {
+    address(state): string {
       return state.address
     },
-    balances(state) {
+    balances(state): Balance[] {
       return state.balances
     },
-    getBalanceByToken: (state) => (tokenId: string): string | undefined => {
-      return state.balances.find(balance => balance.token === tokenId)?.balance
+    getBalanceByToken: (state) => (tokenId: string): string => {
+      return state.balances.find(balance => balance.token === tokenId)?.balance ?? '0'
     }
   },
   mutations: {

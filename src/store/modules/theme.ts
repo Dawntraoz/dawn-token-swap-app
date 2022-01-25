@@ -11,7 +11,7 @@ const theme: Module<Theme, unknown> = {
     };
   },
   getters: {
-    theme(state) {
+    theme(state): 'dark' | 'light' {
       return state.theme
     },
   },
