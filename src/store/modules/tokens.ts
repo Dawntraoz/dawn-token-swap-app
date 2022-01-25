@@ -52,7 +52,10 @@ const tokens: Module<Tokens, unknown> = {
     getPoolByTokens: (state) => (tokenFrom: string, tokenTo: string): Pool | undefined => {
       const comparePoolTokens = (token: string, pool: Pool): boolean => (pool.tokenA === token || pool.tokenB === token);
       return state.pools.find(pool => comparePoolTokens(tokenFrom, pool) && comparePoolTokens(tokenTo, pool))
-    }
+    },
+    pools(state): Pool[] {
+      return state.pools
+    },
   },
   mutations: {
     SET_TOKEN_FROM(state, tokenFrom: Token) {

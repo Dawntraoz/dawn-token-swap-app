@@ -20,9 +20,15 @@ export default defineComponent({
     }
   },
   async mounted() {
-    await this.$store.dispatch('getTokens');
-    await this.$store.dispatch('getBalances');
-    await this.$store.dispatch('getPools');
+    if(!this.$store.getters.tokens.length) {
+      await this.$store.dispatch('getTokens');
+    }
+    if(!this.$store.getters.balances.length) {
+      await this.$store.dispatch('getBalances');
+    }
+    if(!this.$store.getters.pools.length) {
+      await this.$store.dispatch('getPools');
+    }
     this.isLoading = false;
   }
 });
