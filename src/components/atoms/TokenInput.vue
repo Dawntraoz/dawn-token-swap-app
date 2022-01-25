@@ -43,7 +43,7 @@ export default defineComponent({
   data() {
     return {
       inputValue: this.modelValue,
-      validationRegex: new RegExp('^[0-9]*[.,]?[0-9]*$')
+      validationRegex: /^[0-9]*[.,]?[0-9]*$/i
     }
   },
   watch: {
