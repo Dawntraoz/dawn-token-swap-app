@@ -3,7 +3,7 @@
     <account-address class="ml-auto" />
     <div class="relative grid grid-cols-[125px,minmax(auto,1fr)] gap-x-4">
       <token-selector :token-selected="tokenFrom" @selected-token="updateToken('setTokenFrom', $event)" />
-      <token-input v-model="priceFrom" :balance="balanceFrom" />
+      <token-input :key="balanceFrom" v-model="priceFrom" :balance="balanceFrom"  />
     </div>
     <div class="flex w-full items-center">
       <span class="flex-auto bg-violet-200 h-px"></span>

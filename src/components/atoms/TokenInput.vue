@@ -1,6 +1,8 @@
 <template>
+  <input v-if="readonly" :value="modelValue" type="text" placeholder="0.0" class="price-input" readonly />
   <input
-    :value="modelValue"
+    v-else
+    v-model="inputValue"
     type="text"
     placeholder="0.0"
     minlength="0"
@@ -8,12 +10,8 @@
     autocomplete="off"
     autocorrect="off"
     class="price-input"
-    :readonly="readonly"
-    @keypress="validatePrice"
-    @keyup="validatePrice"
-    @input="updatePrice"
   >
-  <small-tag v-if="!readonly && balance === modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-sm text-red-500">
+  <small-tag v-if="!readonly && +balance === +modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-sm text-red-500">
     {{ +balance ? 'max. balance' : 'insufficient balance' }}
   </small-tag>
 </template>
@@ -44,26 +42,20 @@ export default defineComponent({
   emits: ['update:modelValue'],
   data() {
     return {
+      inputValue: this.modelValue,
       validationRegex: new RegExp('^[0-9]*[.,]?[0-9]*$')
     }
   },
-  methods: {
-    validatePrice(event: KeyboardEvent): boolean {
-      const target = (event.target as HTMLInputElement);
-      const currentValue = `${target.value}${event.key}`;
-      if(!this.validationRegex.test(currentValue) || this.balance === this.modelValue) {
-        event.preventDefault();
-        return false;
-      }
+  watch: {
+    inputValue(newValue, oldValue) {
+      let validValue = this.validationRegex.test(newValue) ? newValue : oldValue;
+      validValue = validValue.replace(',', '.');
+      validValue = (+validValue > +this.balance) ? this.balance : validValue;
 
-      return true;
-    },
-    updatePrice(event: Event) {
-      const target = (event.target as HTMLInputElement);
-      const priceValue = target.value.replace(',', '.');
-      this.$emit('update:modelValue', (+priceValue > +this.balance) ? this.balance : priceValue);
+      this.inputValue = validValue;
+      this.$emit('update:modelValue', validValue);
     }
-  }
+  },
 });
 </script>
 
