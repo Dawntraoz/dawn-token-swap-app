@@ -48,12 +48,14 @@ export default defineComponent({
   },
   watch: {
     inputValue(newValue, oldValue) {
-      let validValue = this.validationRegex.test(newValue) ? newValue : oldValue;
-      validValue = validValue.replace(',', '.');
-      validValue = (+validValue > +this.balance) ? this.balance : validValue;
+      this.$nextTick(() => {
+        let validValue = this.validationRegex.test(newValue) ? newValue : oldValue;
+        validValue = validValue.replace(',', '.');
+        validValue = (+validValue > +this.balance) ? this.balance : validValue;
 
-      this.inputValue = validValue;
-      this.$emit('update:modelValue', validValue);
+        this.inputValue = validValue;
+        this.$emit('update:modelValue', validValue);
+      });
     }
   },
 });
