@@ -4,6 +4,7 @@
     <meta name="description" :content="description" />
     <meta name="og:title" :content="title" />
     <meta name="og:description" :content="description" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="og:image" :content="imageUrl" />
   </teleport>
   <AppHeader />
