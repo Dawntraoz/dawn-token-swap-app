@@ -2,7 +2,7 @@
   <input v-if="readonly" :value="modelValue" type="text" placeholder="0.0" class="price-input" readonly />
   <input
     v-else
-    v-model="inputValue"
+    :value="inputValue"
     type="text"
     placeholder="0.0"
     minlength="0"
@@ -11,7 +11,7 @@
     autocomplete="off"
     autocorrect="off"
     class="price-input"
-    @keydown="(event) => inputValue = (event.target as HTMLInputElement)?.value"
+    @input="(event) => inputValue = (event.target as HTMLInputElement)?.value"
   >
   <small-tag v-if="!readonly && +balance === +modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-sm text-red-500">
     {{ +balance ? 'max. balance' : 'insufficient balance' }}
