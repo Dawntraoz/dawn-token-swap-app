@@ -1,6 +1,6 @@
 <template>
   <form class="swap-card" @submit.prevent>
-    <account-address class="ml-auto" />
+    <account-address class="ml-auto pb-4" />
     <div class="relative grid grid-cols-[minmax(max-content,100px),minmax(auto,1fr)] gap-x-4">
       <token-selector :token-selected="tokenFrom" @selected-token="updateToken('setTokenFrom', $event)" />
       <token-input :key="balanceFrom" v-model="priceFrom" :balance="balanceFrom"  />
@@ -24,7 +24,7 @@
         <small-tag v-else>-</small-tag>
       </p>
     </div>
-    <button type="submit" :disabled="!balanceFrom || !currentPool?.price" class="button-submit">Perform swap</button>
+    <button type="submit" :disabled="(+priceFrom > +balanceFrom) || !currentPool?.price" class="button-submit">Perform swap</button>
   </form>
 </template>
 
@@ -68,9 +68,6 @@ export default defineComponent({
     priceTo(): string {
       return this.$store.getters.priceTo;
     },
-    balanceTo(): string {
-      return this.$store.getters.getBalanceByToken(this.tokenTo?.id);
-    },
     currentPool(): Pool | undefined {
       return this.$store.getters.getPoolByTokens(this.tokenFrom?.id, this.tokenTo?.id);
     }
@@ -85,15 +82,12 @@ export default defineComponent({
       const priceFrom = this.priceFrom;
       const tokenTo = this.tokenTo;
       const priceTo = this.priceTo;
-      const balanceTo = this.balanceTo;
-
-      const hasEnoughBalance: boolean = (+priceTo > +balanceTo);
 
       this.$store.dispatch('invertTokens', {
         tokenFrom: tokenTo,
         tokenTo: tokenFrom,
-        priceFrom: hasEnoughBalance ? balanceTo : priceTo,
-        priceTo: hasEnoughBalance ? this.poolCalculation(tokenTo?.id, balanceTo) : priceFrom
+        priceFrom: priceTo,
+        priceTo: priceFrom
       });
     },
     poolCalculation(tokenId: string, value: string): string {
@@ -107,7 +101,7 @@ export default defineComponent({
 
 <style scoped>
 .swap-card {
-  @apply grid gap-y-6 bg-white dark:bg-violet-500 w-lg max-w-full rounded-2xl py-4 px-6 shadow-lg mx-auto;
+  @apply grid gap-y-4 bg-white dark:bg-violet-500 w-lg max-w-full rounded-2xl py-4 px-6 shadow-lg mx-auto;
 }
 .button-submit {
   @apply bg-violet-700 text-white w-full p-4 font-bold rounded-lg;

@@ -1,5 +1,5 @@
 <template>
-  <span class="bg-violet-100 dark:bg-violet-700 dark:text-red-200 py-[3px] px-2 rounded-md">
+  <span class="bg-violet-100 dark:bg-violet-700 py-[3px] px-2 rounded-md">
     <slot></slot>
   </span>
 </template>

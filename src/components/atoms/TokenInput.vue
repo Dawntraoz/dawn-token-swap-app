@@ -11,10 +11,11 @@
     autocomplete="off"
     autocorrect="off"
     class="price-input"
+    :class="{ 'text-red-500 dark:text-red-300': +balance < +modelValue }"
     @input="(event) => inputValue = (event.target as HTMLInputElement)?.value"
   >
-  <small-tag v-if="!readonly && +balance === +modelValue" class="absolute top-1/2 right-0 transform -translate-y-1/2 text-xs md:text-sm text-red-500">
-    {{ +balance ? 'max' : 'no balance' }}
+  <small-tag v-if="!readonly && +balance < +modelValue" class="absolute top-0 right-0 transform -translate-y-1/2 text-xs text-red-500 dark:text-red-300">
+    insufficient balance
   </small-tag>
 </template>
 
@@ -53,7 +54,6 @@ export default defineComponent({
       handler(newValue, oldValue) {
         let validValue = this.validationRegex.test(newValue) ? newValue : oldValue;
         validValue = validValue.replace(',', '.');
-        validValue = (+validValue > +this.balance) ? this.balance : validValue;
 
         this.inputValue = validValue;
         this.$emit('update:modelValue', validValue);
@@ -66,7 +66,7 @@ export default defineComponent({
 
 <style scoped>
 .price-input {
-  @apply bg-transparent font-medium text-3xl w-full focus:outline-none;
+  @apply py-4 bg-transparent font-medium text-3xl w-full focus:outline-none;
 }
 .price-input:read-only {
   @apply font-normal text-violet-400 dark:text-violet-200;
