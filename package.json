@@ -1,5 +1,5 @@
 {
-  "name": "dawn-vue3-template",
+  "name": "dawn-token-swap-app",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
