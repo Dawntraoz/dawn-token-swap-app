@@ -7,6 +7,7 @@
     placeholder="0.0"
     minlength="0"
     maxlength="79"
+    pattern="^[0-9]*[.,]?[0-9]*$"
     autocomplete="off"
     autocorrect="off"
     class="price-input"
