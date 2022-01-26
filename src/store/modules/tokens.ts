@@ -90,10 +90,6 @@ const tokens: Module<Tokens, unknown> = {
     setPriceTo({ commit }, priceTo: string) {
       commit('SET_PRICE_TO', priceTo);
     },
-    resetPrices({ commit }) {
-      commit('SET_PRICE_FROM', '');
-      commit('SET_PRICE_TO', '');
-    },
     invertTokens({ commit }, payload) {
       commit('SET_TOKEN_FROM', payload.tokenFrom);
       commit('SET_TOKEN_TO', payload.tokenTo);

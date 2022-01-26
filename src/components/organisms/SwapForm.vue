@@ -1,7 +1,7 @@
 <template>
   <form class="swap-card" @submit.prevent>
     <account-address class="ml-auto" />
-    <div class="relative grid grid-cols-[125px,minmax(auto,1fr)] gap-x-4">
+    <div class="relative grid grid-cols-[minmax(max-content,100px),minmax(auto,1fr)] gap-x-4">
       <token-selector :token-selected="tokenFrom" @selected-token="updateToken('setTokenFrom', $event)" />
       <token-input :key="balanceFrom" v-model="priceFrom" :balance="balanceFrom"  />
     </div>
@@ -15,12 +15,13 @@
         </svg>
       </button>
     </div>
-    <div class="relative grid grid-cols-[125px,minmax(auto,1fr)] gap-4">
+    <div class="relative grid grid-cols-[minmax(max-content,100px),minmax(auto,1fr)] gap-4">
       <token-selector :token-selected="tokenTo" @selected-token="updateToken('setTokenTo', $event)" />
       <token-input v-model="priceTo" :readonly="true" />
       <p class="col-span-2 text-xs flex items-center gap-2">
-        Pool price:
-        <small-tag>{{ currentPool?.price ?? '-' }}</small-tag>
+        Pool price :
+        <small-tag v-if="currentPool?.price">{{ `1 ${currentPool?.tokenA} = ${currentPool?.price} ${currentPool?.tokenB}` }}</small-tag>
+        <small-tag v-else>-</small-tag>
       </p>
     </div>
     <button type="submit" :disabled="!balanceFrom || !currentPool?.price" class="button-submit">Perform swap</button>
@@ -55,7 +56,6 @@ export default defineComponent({
         this.$store.dispatch('setPriceFrom', newValue);
         
         const newPriceTo = this.poolCalculation(this.tokenFrom?.id, newValue);
-        if(!newPriceTo) return;
         this.$store.dispatch('setPriceTo', newPriceTo);
       }
     },
@@ -78,7 +78,7 @@ export default defineComponent({
   methods: {
     updateToken(actionName: string, token: Token) {
       this.$store.dispatch(actionName, token);
-      this.$store.dispatch(`resetPrices`);
+      this.$store.dispatch('setPriceTo', this.poolCalculation(this.tokenFrom?.id, this.priceFrom) ?? '');
     },
     invertTokens() {
       const tokenFrom = this.tokenFrom;
@@ -96,8 +96,8 @@ export default defineComponent({
         priceTo: hasEnoughBalance ? this.poolCalculation(tokenTo?.id, balanceTo) : priceFrom
       });
     },
-    poolCalculation(tokenId: string, value: string): string | boolean {
-      if(!this.currentPool) return false;
+    poolCalculation(tokenId: string, value: string): string {
+      if(!this.currentPool) return '';
       const multiplicateCondition = tokenId === this.currentPool.tokenA;
       return (multiplicateCondition ? +value * this.currentPool.price : +value / this.currentPool.price).toString();
     }
