@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 import SwapForm from '../components/organisms/SwapForm.vue';
 
 export default defineComponent({
@@ -16,20 +16,20 @@ export default defineComponent({
   },
   data() {
     return {
-      isLoading: true
-    }
+      isLoading: true,
+    };
   },
   async mounted() {
-    if(!this.$store.getters.tokens.length) {
+    if (!this.$store.getters.tokens.length) {
       await this.$store.dispatch('getTokens');
     }
-    if(!this.$store.getters.balances.length) {
+    if (!this.$store.getters.balances.length) {
       await this.$store.dispatch('getBalances');
     }
-    if(!this.$store.getters.pools.length) {
+    if (!this.$store.getters.pools.length) {
       await this.$store.dispatch('getPools');
     }
     this.isLoading = false;
-  }
+  },
 });
 </script>

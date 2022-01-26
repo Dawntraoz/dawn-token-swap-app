@@ -3,7 +3,7 @@
     <account-address class="ml-auto pb-4" />
     <div class="relative grid grid-cols-[minmax(max-content,100px),minmax(auto,1fr)] gap-x-4">
       <token-selector :token-selected="tokenFrom" @selected-token="updateToken('setTokenFrom', $event)" />
-      <token-input :key="balanceFrom" v-model="priceFrom" :balance="balanceFrom"  />
+      <token-input :key="`${balanceFrom}-${tokenFrom?.id}`" v-model="priceFrom" :balance="balanceFrom"  />
     </div>
     <div class="flex w-full items-center">
       <span class="flex-auto bg-violet-200 h-px"></span>
@@ -17,7 +17,7 @@
     </div>
     <div class="relative grid grid-cols-[minmax(max-content,100px),minmax(auto,1fr)] gap-4">
       <token-selector :token-selected="tokenTo" @selected-token="updateToken('setTokenTo', $event)" />
-      <token-input v-model="priceTo" :readonly="true" />
+      <token-input :key="`token-input-${tokenTo?.id}`" :model-value="priceTo" :readonly="true" />
       <p class="col-span-2 text-xs flex items-center gap-2">
         Pool price :
         <small-tag v-if="currentPool?.price">{{ `1 ${currentPool?.tokenA} = ${currentPool?.price} ${currentPool?.tokenB}` }}</small-tag>
@@ -56,6 +56,7 @@ export default defineComponent({
         this.$store.dispatch('setPriceFrom', newValue);
         
         const newPriceTo = this.poolCalculation(this.tokenFrom?.id, newValue);
+        if(!newPriceTo) return;
         this.$store.dispatch('setPriceTo', newPriceTo);
       }
     },
@@ -83,12 +84,10 @@ export default defineComponent({
       const tokenTo = this.tokenTo;
       const priceTo = this.priceTo;
 
-      this.$store.dispatch('invertTokens', {
-        tokenFrom: tokenTo,
-        tokenTo: tokenFrom,
-        priceFrom: priceTo,
-        priceTo: priceFrom
-      });
+      this.$store.dispatch('setTokenFrom', tokenTo);
+      this.$store.dispatch('setTokenTo', tokenFrom);
+      this.$store.dispatch('setPriceFrom', priceTo);
+      this.$store.dispatch('setPriceTo', priceFrom);
     },
     poolCalculation(tokenId: string, value: string): string {
       if(!this.currentPool) return '';

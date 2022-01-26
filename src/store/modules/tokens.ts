@@ -90,12 +90,6 @@ const tokens: Module<Tokens, unknown> = {
     setPriceTo({ commit }, priceTo: string) {
       commit('SET_PRICE_TO', priceTo);
     },
-    invertTokens({ commit }, payload) {
-      commit('SET_TOKEN_FROM', payload.tokenFrom);
-      commit('SET_TOKEN_TO', payload.tokenTo);
-      commit('SET_PRICE_FROM', payload.priceFrom);
-      commit('SET_PRICE_TO', payload.priceTo);
-    },
     async getTokens({ commit }) {
       const response = await fetch(new Request('/data/tokens.json'));
       const { tokens } = await response.json();
