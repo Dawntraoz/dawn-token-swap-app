@@ -95,7 +95,7 @@ export default defineComponent({
     poolCalculation(tokenId: string, value: string): string {
       if(!this.currentPool) return '';
       const multiplicateCondition = tokenId === this.currentPool.tokenA;
-      return (multiplicateCondition ? new BigNumber(value).multipliedBy(this.currentPool.price) : new BigNumber(value).dividedBy(this.currentPool.price)).toString();
+      return (multiplicateCondition ? new BigNumber(value || 0).multipliedBy(this.currentPool.price) : new BigNumber(value || 0).dividedBy(this.currentPool.price)).toString();
     }
   }
 });
