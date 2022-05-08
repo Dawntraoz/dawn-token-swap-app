@@ -30,11 +30,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import BigNumber from 'bignumber.js';
 import type { Pool, Token } from '../../store/modules/tokens';
 import AccountAddress from '../atoms/AccountAddress.vue';
 import SmallTag from '../atoms/SmallTag.vue';
 import TokenInput from '../atoms/TokenInput.vue';
 import TokenSelector from '../molecules/TokenSelector.vue';
+
+BigNumber.config({ EXPONENTIAL_AT: [-20, 20] })
 
 export default defineComponent({
   name: 'SwapForm',
@@ -92,7 +95,7 @@ export default defineComponent({
     poolCalculation(tokenId: string, value: string): string {
       if(!this.currentPool) return '';
       const multiplicateCondition = tokenId === this.currentPool.tokenA;
-      return (multiplicateCondition ? +value * this.currentPool.price : +value / this.currentPool.price).toString();
+      return (multiplicateCondition ? new BigNumber(value).multipliedBy(this.currentPool.price) : new BigNumber(value).dividedBy(this.currentPool.price)).toString();
     }
   }
 });
