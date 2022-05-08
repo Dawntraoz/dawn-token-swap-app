@@ -53,7 +53,7 @@ export default defineComponent({
     inputValue: {
       handler(newValue, oldValue) {
         let validValue = this.validationRegex.test(newValue) ? newValue : oldValue;
-        validValue = validValue.replace(',', '.');
+        validValue = validValue?.replace(',', '.');
 
         this.inputValue = validValue;
         this.$emit('update:modelValue', validValue);
